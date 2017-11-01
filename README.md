@@ -1,3 +1,7 @@
+This is the Igneous fork of [github.com/containers/image]. This repo contains
+customizations that are not (yet) upstream. We vendor this repo into our
+product codebase.  We provide no support for this repo.
+
 [![GoDoc](https://godoc.org/github.com/containers/image?status.svg)](https://godoc.org/github.com/containers/image) [![Build Status](https://travis-ci.org/containers/image.svg?branch=master)](https://travis-ci.org/containers/image)
 =
 
