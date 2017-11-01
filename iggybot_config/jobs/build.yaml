@@ -1,0 +1,27 @@
+description: Build
+
+slavetypes:
+    - c3.4xlarge
+
+steps:
+    - Checkout
+
+    # build docker image
+    - ShellCommand:
+        command: >
+            annotate-output docker build -t image-test -f .travis.Dockerfile .
+        maxTime: 600
+        haltOnFailure: true
+
+    # run tests in docker container (modified from .travis.yml)
+    - ShellCommand:
+        command: >
+            annotate-output docker run --privileged --rm
+            --user $(id -u):$(id -g) -e GOPATH=/gopath
+            -e TRASH_CACHE=/gopath/.trashcache
+            -v /etc/passwd:/etc/passwd -v /etc/sudoers:/etc/sudoers
+            -v /etc/sudoers.d:/etc/sudoers.d -v /var/run:/var/run:z
+            -v $PWD:/gopath/src/github.com/containers/image:Z
+            -w /gopath/src/github.com/containers/image image-test
+            bash -c "sudo chown $(id -u):$(id -g) /gopath /gopath/src /gopath/src/github.com /gopath/src/github.com/containers ; PATH=$PATH:/gopath/bin make tools validate test SUDO=sudo BUILDTAGS=\"btrfs_noversion libdm_no_deferred_remove\""
+        maxTime: 2400

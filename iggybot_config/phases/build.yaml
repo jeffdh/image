@@ -1,0 +1,7 @@
+description: Build containers/image
+
+pr: True
+quartz: 0
+
+jobs:
+    - build
